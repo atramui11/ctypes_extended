@@ -31,6 +31,8 @@ class _Field:
         self.name = name
         self.type_ = type_
         self.real_name = "_" + name
+        self.maxRange = 10
+        self.minRange = 5
         self.help = kwargs.pop("description", f"Proxy structure field {name}")
         self.repr = kwargs.pop("repr", None)
         self.enum = kwargs.pop("enum", None)
@@ -58,6 +60,17 @@ class _Field:
         return value
 
     def __set__(self, instance, value):
+        print("now printing val: ", value)
+        print("now printing minRange: ", self.minRange)
+        print("now printing maxRange: ", self.maxRange)
+        
+        rangeArray = [self.minRange, self.maxRange]
+
+        print ("rangeArray is", rangeArray)
+
+        if value and value not in rangeArray:
+            raise ValueError('value to set is outside of range')
+
         if self.enum:
             if(type(value) is str):
                 value = self.enum[value].value
